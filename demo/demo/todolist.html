@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>hello,world</title>
+	<meta charset="utf-8">
+	<script type="text/javascript" src="../angular.min.js"></script>
+	<script type="text/javascript" src="../../component/button/button.js"></script>
+	<link rel="stylesheet" href="../../dist/css/antd.css">
+	<script type="text/javascript">
+		var app = angular.module('myapp',['button']);
+		app.controller('myController',['$scope',function($scope){
+			$scope.value="33";
+		}]);
+	</script>
+</head>
+<body ng-app="myapp">
+<div ng-controller="myController" style="margin: 20px;">
+	<a-button type="primary" icon="search" loading="true" size="large" style="width:130px;">确定</a-button>
+</div>
+</body>
+</html>
