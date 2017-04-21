@@ -1,12 +1,19 @@
 angular.module('icon',[])
 .directive('icon',function(){
 	return {
-		restrict: 'E',
+		restrict: 'AE',
 		replace: true,
 		scope:{
 			type:'@',
-			spin:'@'
+			spin:'='
 		},
-		template:'<i class="anticon {{spin==\'true\'?\'anticon-spin\':\'\'}} anticon-{{type}}"></i>'
+		template:'<i ng-class="iconCls"></i>',
+		link:function(scope){
+			var prefixCls = 'anticon';
+			scope.iconCls = {};
+			scope.iconCls[prefixCls] = true;
+			scope.iconCls[prefixCls + '-' + scope.type] = scope.type;
+			scope.iconCls[prefixCls + '-spin'] = scope.spin;
+		}
 	}
 })
