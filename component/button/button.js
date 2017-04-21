@@ -1,5 +1,6 @@
 /**
  * @API
+ * <a-button>
  * +------------------------------------------------------------------------+
  * | attr     | descriptions                            | type    | default |
  * +----------+-----------------------------------------+---------+---------+
@@ -19,41 +20,55 @@
  * +----------+-----------------------------------------+---------+---------+
  * | ghost    | ghost button. set background transparent| boolean | false   |
  * +----------+-----------------------------------------+---------+---------+
- * 
+ * | disabled | set button disabled.                    | -       | -       |
+ * +----------+-----------------------------------------+---------+---------+
+ *
+ * <button-group>
+ * +----------+-----------------------------------------+---------+---------+
+ * | size     | set button's size.'small','large' or not| string  | default |
+ * +----------+-----------------------------------------+---------+---------+
  * @example
  * <a-button type="primary"></a-button> : a primary button
  * <a-button loading="true"></a-button> : a loading button
  * 
- * ant-btn ant-btn-
+ * create by Jiang on April 21 2017
  */
 
 angular.module('button',[])
-.directive('aButton',['$timeout',function($timeout){
+.constant('btnSize',{
+	small: 'sm',
+	large: 'lg'
+})
+.directive('aButton',['$timeout','btnSize',function($timeout,btnSize){
 	return{
 		restrict:'AE',
-		replace: true,
 		transclude: true,
+		replace: true,
 		scope:{
 			type:"@",
-			htmlType:"@",
+			htmltype:"@",
 			icon:'@',
 			shape:'@',
 			size:'@',
-			loading:'@',
-			ghost:'@',
-			style:'@',	//it's ok.
-			onclick:'&'
+			loading:'=',
+			ghost:'=',
+			style:'@'
 		},
-		template:'<button ng-click="click()" ng-style="style" ng-class="btnCls" type="{{htmlType}}">\
-					<i class="anticon anticon-spin anticon-loading" ng-if="loading==\'true\'"></i>\
-					<i class="anticon anticon-{{icon}}" ng-if="(!(loading==\'true\')) && !!icon"></i>\
+		template:'<button ng-click="click()" ng-style="style" ng-class="btnCls" type="{{htmltype}}" ng-disabled="disabled">\
+					<i class="anticon anticon-spin anticon-loading" ng-if="loading"></i>\
+					<i ng-class="iconCls" ng-if="!loading && icon"></i>\
 					<span ng-transclude ng-if="shape==\'circle\'?false:true"></span>\
 				</button>',
 		link: function(scope,element,attrs){
 			var prefixCls = 'ant-btn';
-			var btnSize = {large:'lg',small:'sm'};
+			scope.iconCls = 'anticon anticon-' + scope.icon;
 			scope.clicked = false;
 			scope.btnCls = {};
+
+			if('disabled' in attrs){
+				scope.disabled = true;
+			}
+
 			scope.btnCls[prefixCls] = true;
 			scope.btnCls[prefixCls + '-' + scope.type] = scope.type;
 			scope.btnCls[prefixCls + '-' + btnSize[scope.size]] = scope.size;
@@ -62,25 +77,33 @@ angular.module('button',[])
 			scope.btnCls[prefixCls + '-background-ghost'] = scope.ghost;
 			scope.click = function(){
 				scope.clicked = true;
+				if(scope.clearTimeout){
+					clearTimeout();
+				}
 				scope.clearTimeout = $timeout(function(){
 					scope.clicked = false;
 				},500);
-				console.log(scope.btnCls);
 			}
+			scope.$watch('clicked',function(newVal){
+				scope.btnCls[prefixCls + '-clicked'] = newVal;
+			});
 		}
 	}
 }])
-.directive('buttonGroup',function(){
+.directive('buttonGroup',['btnSize',function(btnSize){
 	return {
-		restrict: 'E',
+		restrict: 'AE',
 		replace: true,
 		transclude: true,
 		scope:{
 			size:"@"
 		},
-		template:'<div class="ant-btn-group ant-btn-group-{{btnSize[size]}}" ng-transclude></div>',
+		template:'<div ng-class="btnGroupCls" ng-transclude></div>',
 		link: function(scope){
-			scope.btnSize = {large:'lg',small:'sm'};
+			var prefixCls = 'ant-btn-group';
+			scope.btnGroupCls = {};
+			scope.btnGroupCls[prefixCls] = true;
+			scope.btnGroupCls[prefixCls + '-' + btnSize[scope.size]] = scope.size;
 		}
 	}
-})
+}])
