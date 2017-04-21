@@ -50,7 +50,7 @@ angular.module('button',[])
 			icon:'@',
 			shape:'@',
 			size:'@',
-			loading:'=',
+			loading:'@',
 			ghost:'=',
 			style:'@'
 		},
@@ -63,18 +63,11 @@ angular.module('button',[])
 			var prefixCls = 'ant-btn';
 			scope.iconCls = 'anticon anticon-' + scope.icon;
 			scope.clicked = false;
-			scope.btnCls = {};
+			scope.elAttr = attrs
 
 			if('disabled' in attrs){
 				scope.disabled = true;
 			}
-
-			scope.btnCls[prefixCls] = true;
-			scope.btnCls[prefixCls + '-' + scope.type] = scope.type;
-			scope.btnCls[prefixCls + '-' + btnSize[scope.size]] = scope.size;
-			scope.btnCls[prefixCls + '-' + scope.shape] = scope.shape;
-			scope.btnCls[prefixCls + '-clicked'] = scope.clicked;
-			scope.btnCls[prefixCls + '-background-ghost'] = scope.ghost;
 			scope.click = function(){
 				scope.clicked = true;
 				if(scope.clearTimeout){
@@ -84,9 +77,18 @@ angular.module('button',[])
 					scope.clicked = false;
 				},500);
 			}
-			scope.$watch('clicked',function(newVal){
-				scope.btnCls[prefixCls + '-clicked'] = newVal;
+			scope.$watchCollection('elAttr',function(newVal,oldVal){
+				updateCls();
 			});
+			function updateCls(){
+				scope.btnCls = {};
+				scope.btnCls[prefixCls] = true;
+				scope.btnCls[prefixCls + '-' + scope.type] = scope.type;
+				scope.btnCls[prefixCls + '-' + btnSize[scope.size]] = scope.size;
+				scope.btnCls[prefixCls + '-' + scope.shape] = scope.shape;
+				scope.btnCls[prefixCls + '-clicked'] = scope.clicked;
+				scope.btnCls[prefixCls + '-background-ghost'] = scope.ghost;
+			}
 		}
 	}
 }])
@@ -101,9 +103,14 @@ angular.module('button',[])
 		template:'<div ng-class="btnGroupCls" ng-transclude></div>',
 		link: function(scope){
 			var prefixCls = 'ant-btn-group';
-			scope.btnGroupCls = {};
-			scope.btnGroupCls[prefixCls] = true;
-			scope.btnGroupCls[prefixCls + '-' + btnSize[scope.size]] = scope.size;
+			scope.$watch('size',function(){
+				updateCls();
+			})
+			function updateCls(){
+				scope.btnGroupCls = {};
+				scope.btnGroupCls[prefixCls] = true;
+				scope.btnGroupCls[prefixCls + '-' + btnSize[scope.size]] = scope.size;
+			}
 		}
 	}
 }])
