@@ -4,24 +4,34 @@
 	<title>hello,world</title>
 	<meta charset="utf-8">
 	<script type="text/javascript" src="../angular.min.js"></script>
-	<script type="text/javascript" src="../../component/button/button.js"></script>
+	<script type="text/javascript" src="../../component/util/util.js"></script>
+	<script type="text/javascript" src="../../component/grid/grid.js"></script>
 	<link rel="stylesheet" href="../../dist/css/antd.css">
 	<script type="text/javascript">
-		var app = angular.module('myapp',['button']);
+		var app = angular.module('myapp',['grid']);
 		app.controller('myController',['$scope',function($scope){
 			$scope.value="33";
 		}]);
 	</script>
+	<style type="text/css">
+		.block{
+			height: 100px;
+			background-color: blue;
+		}
+	</style>
 </head>
 <body ng-app="myapp">
 <div ng-controller="myController" style="margin: 20px;">
-	<input type="text" ng-model="load">
-	<a-button type="primary"  icon="search" >确定</a-button>
-	<span a-button icon="search">确定</span>
-	<button-group size="{{load}}">
-		<a-button disabled>L</a-button><a-button disabled>M</a-button><a-button disabled>R</a-button>
-	</button-group>
-	<icon type="verticle-right" spin="true"></icon>
+	<label>gutter:</label><input type="text" ng-model="gutter">
+	<br>
+	<a-row gutter="{{gutter}}">
+		<a-col span="4"><div class="block"></div></a-col>
+		<a-col span="4"><div class="block"></div></a-col>
+		<a-col span="4"><div class="block"></div></a-col>
+		<a-col span="4"><div class="block"></div></a-col>
+		<a-col span="4"><div class="block"></div></a-col>
+		<a-col span="4"><div class="block"></div></a-col>
+	</a-row>
 </div>
 </body>
 </html>
