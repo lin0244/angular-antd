@@ -63,7 +63,7 @@ angular.module('button',[])
 			var prefixCls = 'ant-btn';
 			scope.iconCls = 'anticon anticon-' + scope.icon;
 			scope.clicked = false;
-			scope.elAttr = attrs
+			scope.elAttr = attrs;
 
 			if('disabled' in attrs){
 				scope.disabled = true;
