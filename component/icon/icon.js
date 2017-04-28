@@ -1,5 +1,5 @@
 angular.module('icon',[])
-.directive('icon',function(){
+.directive('aIcon',function(){
 	return {
 		restrict: 'AE',
 		replace: true,

@@ -37,7 +37,7 @@
  *
  **/
 angular.module('grid',['util'])
-.directive('aRow',['reg',function(reg){
+.directive('aRow',function(){
 	return {
 		restrict:'AE',
 		replace:true,
@@ -59,7 +59,7 @@ angular.module('grid',['util'])
 			updateCls();
 			console.log(scope.rowCls);
 			attrs.$observe('gutter',function(newVal){
-				if(reg.isNumber(newVal)){
+				if(angularF.isNumber(newVal)){
 					ctrl.gutter = parseInt(scope.gutter || 0);
 					if(ctrl.gutter == 0){
 						scope.rowStyle = {};
@@ -98,8 +98,8 @@ angular.module('grid',['util'])
 		}
 
 	}
-}])
-.directive('aCol',['reg',function(reg){
+})
+.directive('aCol',function(){
 	return {
 		restrict:'AE',
 		replace:true,
@@ -109,17 +109,20 @@ angular.module('grid',['util'])
 			span:'@',
 			order:'@',
 			offset:'@',
-			xs:'@',
-			sm:'@',
-			md:'@',
-			lg:'@',
-			xl:'@'
+			xs:'=',
+			sm:'=',
+			md:'=',
+			lg:'=',
+			xl:'='
 		},
 		template:'<div ng-class="colCls" ng-style="colStyle" ng-transclude></div>',
 		link:function(scope,ele,attrs,ctrl){
+			var prefixCls = 'ant-col';
+				isResponsive = !!xs || !!sm || !!md || !!lg || !!xl;
 			scope.rowCtrl = ctrl;
+			console.log(typeof scope.xs);
 			attrs.$observe('span',function(newVal){
-				if(reg.isNumber(scope.span)){
+				if(angular.isNumber(scope.span)){
 					scope.colCls="ant-col-" + scope.span;
 				}
 			})
@@ -134,10 +137,15 @@ angular.module('grid',['util'])
 					}
 				}
 
-			})
+			});
+			attrs.$observe('order',function(newVal){
+				scope.colStyle.order = newVal;
+			});
 			function updateCls(){
-
+				scope.colCls = {};
+				scope.colCls[prefixCls + '-' + scope.span] = angular.isNumber(scope.span);
+				
 			}
 		}
 	}
-}])
+})

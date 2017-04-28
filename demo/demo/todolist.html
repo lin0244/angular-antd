@@ -4,34 +4,20 @@
 	<title>hello,world</title>
 	<meta charset="utf-8">
 	<script type="text/javascript" src="../angular.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.32/angular-animate.js"></script>
 	<script type="text/javascript" src="../../component/util/util.js"></script>
-	<script type="text/javascript" src="../../component/grid/grid.js"></script>
+	<script type="text/javascript" src="../../component/dropdown/dropdown.js"></script>
+	<script type="text/javascript" src="../../component/icon/icon.js"></script>
 	<link rel="stylesheet" href="../../dist/css/antd.css">
 	<script type="text/javascript">
-		var app = angular.module('myapp',['grid']);
+		var app = angular.module('myapp',['dropdown','icon']);
 		app.controller('myController',['$scope',function($scope){
-			$scope.value="33";
 		}]);
 	</script>
-	<style type="text/css">
-		.block{
-			height: 100px;
-			background-color: blue;
-		}
-	</style>
 </head>
-<body ng-app="myapp">
+<body ng-app="myapp" style="position: relative;">
 <div ng-controller="myController" style="margin: 20px;">
-	<label>gutter:</label><input type="text" ng-model="gutter">
-	<br>
-	<a-row gutter="{{gutter}}">
-		<a-col span="4"><div class="block"></div></a-col>
-		<a-col span="4"><div class="block"></div></a-col>
-		<a-col span="4"><div class="block"></div></a-col>
-		<a-col span="4"><div class="block"></div></a-col>
-		<a-col span="4"><div class="block"></div></a-col>
-		<a-col span="4"><div class="block"></div></a-col>
-	</a-row>
+	<a-dropdown><a href="#" class="ant-dropdown-link ant-dropdown-trigger" style="font-size: 14px;">Hover me <a-icon type="down"></a-icon></a></a-dropdown>
 </div>
 </body>
 </html>
